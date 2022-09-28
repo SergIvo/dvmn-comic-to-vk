@@ -15,8 +15,15 @@ def get_image_url(base_url):
     return image_details['img']
 
 
+def get_image_comment(base_url):
+    response = requests.get(f'{base_url}/info.0.json')
+    response.raise_for_status()
+    image_details = response.json()
+    return image_details['alt']
+
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    image_url = get_image_url('https://xkcd.com/353/')
-    download_image(image_url, 'comic.png')
+    image_comment = get_image_comment('https://xkcd.com/353/')
+    print(image_comment)
 

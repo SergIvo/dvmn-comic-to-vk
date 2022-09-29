@@ -29,7 +29,8 @@ def make_url_for_token(client_id):
     url = 'https://oauth.vk.com/authorize'
     params = {
         'client_id': client_id,
-        'scope': 'scope=photos,groups',
+        'scope': 'photos,groups,wall,offline',
+        #'redirect_uri': 'https://oauth.vk.com/blank.html'
         'response_type': 'token'
     }
     url_parts = urlparse(url)
@@ -37,9 +38,17 @@ def make_url_for_token(client_id):
     return urlunparse(url_parts)
 
 
-def get_user_groups(user_id, token):
+def get_user_groups(token):
     url = 'https://api.vk.com/method/groups.get'
-    params = {'access_token': token, 'user_id': user_id, 'v': '5.194'}
+    params = {'access_token': token, 'v': '5.194'}
+    response = requests.get(url, params=params)
+    response.raise_for_status()
+    return response.json()['response']
+
+
+def get_wall_upload_server(token, group_id):
+    url = 'https://api.vk.com/method/photos.getWallUploadServer'
+    params = {'access_token': token, 'v': '5.194', 'group_id': group_id}
     response = requests.get(url, params=params)
     response.raise_for_status()
     return response.json()
@@ -48,8 +57,11 @@ def get_user_groups(user_id, token):
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     load_dotenv()
-    user_id = os.getenv('USER_ID')
+    client_id = os.getenv('CLIENT_ID')
+    print(make_url_for_token(client_id))
     token = os.getenv('ACCESS_TOKEN')
-    print(get_user_groups(user_id, token))
+    groups = get_user_groups(token)
+    group_id = groups['items'][0]
+    print(get_wall_upload_server(token, group_id))
 
 

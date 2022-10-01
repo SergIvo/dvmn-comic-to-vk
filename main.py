@@ -30,7 +30,6 @@ def make_url_for_token(client_id):
     params = {
         'client_id': client_id,
         'scope': 'photos,groups,wall,offline',
-        #'redirect_uri': 'https://oauth.vk.com/blank.html'
         'response_type': 'token'
     }
     url_parts = urlparse(url)
@@ -51,7 +50,15 @@ def get_wall_upload_server(token, group_id):
     params = {'access_token': token, 'v': '5.194', 'group_id': group_id}
     response = requests.get(url, params=params)
     response.raise_for_status()
-    return response.json()
+    return response.json()['response']
+
+
+def upload_photo(url, path_to_photo):
+    with open(path_to_photo, 'rb') as photo:
+        files = {'photo': photo}
+        response = requests.post(url, files=files)
+        response.raise_for_status()
+        return response.json()
 
 
 # Press the green button in the gutter to run the script.
@@ -62,6 +69,8 @@ if __name__ == '__main__':
     token = os.getenv('ACCESS_TOKEN')
     groups = get_user_groups(token)
     group_id = groups['items'][0]
-    print(get_wall_upload_server(token, group_id))
+    server = get_wall_upload_server(token, group_id)
+    upload_url = server['upload_url']
 
-
+    uploaded_photo = upload_photo(upload_url, 'comic.png')
+    print(uploaded_photo)

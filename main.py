@@ -123,7 +123,10 @@ def repost_random_comic(token, user_id):
 
 if __name__ == '__main__':
     load_dotenv()
-    token = os.getenv('ACCESS_TOKEN')
     client_id = os.getenv('CLIENT_ID')
-    repost_random_comic(token, client_id)
-    print('Комикс опубликован в группе.')
+    token = os.getenv('ACCESS_TOKEN')
+    if token:
+        repost_random_comic(token, client_id)
+        print('Комикс опубликован в группе.')
+    else:
+        print(f'Follow this link to get the authentication token \n{make_url_for_token(client_id)}')

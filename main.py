@@ -102,7 +102,8 @@ def get_random_comic_url(limit):
 def repost_random_comic(token, user_id):
     comic_url = get_random_comic_url(2679)
     image_url = get_image_url(comic_url)
-    download_image(image_url, 'comic.png')
+    image_path = os.path.join(os.getcwd(), 'comic.png')
+    download_image(image_url, image_path)
     comment = get_image_comment(comic_url)
 
     groups = get_user_groups(token)
@@ -110,22 +111,19 @@ def repost_random_comic(token, user_id):
     server = get_wall_upload_server(token, group_id)
     upload_url = server['upload_url']
 
-    uploaded_photo = upload_photo(upload_url, 'comic.png')
+    uploaded_photo = upload_photo(upload_url, image_path)
     photo, server, photo_hash = uploaded_photo['photo'], uploaded_photo['server'], uploaded_photo['hash']
 
     saved_photo = save_photo_to_vk(token, user_id, group_id, photo, server, photo_hash)
     photo_id = saved_photo[0]['id']
     photo_owner_id = saved_photo[0]['owner_id']
-    posted = post_on_wall(token, group_id, photo_owner_id, photo_id, comment)
-    os.remove('comic.png')
-    return posted
+    post_on_wall(token, group_id, photo_owner_id, photo_id, comment)
+    os.remove(image_path)
 
 
 if __name__ == '__main__':
     load_dotenv()
     token = os.getenv('ACCESS_TOKEN')
     client_id = os.getenv('CLIENT_ID')
-
-    posted = repost_random_comic(token, client_id)
-    print(posted)
-
+    repost_random_comic(token, client_id)
+    print('Комикс опубликован в группе.')

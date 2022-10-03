@@ -100,8 +100,7 @@ def repost_random_comic(token, user_id):
     image_url, comment, image_path = get_image_details(comic_url)
     download_image(image_url, image_path)
     try:
-        groups = get_user_groups(token)
-        group_id = groups['items'][0]
+        group_id = int(os.getenv('VK_GROUP_ID'))
         server = get_wall_upload_server(token, group_id)
         upload_url = server['upload_url']
 

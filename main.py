@@ -89,14 +89,18 @@ def post_on_wall(token, group_id, photo_owner_id, photo, message):
     return response.json()['response']
 
 
-def get_random_comic_url(limit):
-    url = 'https://xkcd.com'
-    comic_number = randint(1, limit)
-    return urljoin(url, str(comic_number))
+def get_random_comic_url():
+    base_url = 'https://xkcd.com'
+    api_url = 'https://xkcd.com/info.0.json'
+    response = requests.get(api_url)
+    response.raise_for_status()
+    last_comic_number = response.json()['num']
+    random_comic_number = randint(1, last_comic_number)
+    return urljoin(base_url, str(random_comic_number))
 
 
 def repost_random_comic(token, user_id):
-    comic_url = get_random_comic_url(2679)
+    comic_url = get_random_comic_url()
     image_url, comment, image_path = get_image_details(comic_url)
     download_image(image_url, image_path)
     try:

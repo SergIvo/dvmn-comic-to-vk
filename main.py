@@ -58,8 +58,8 @@ def upload_photo(url, path_to_photo):
     with open(path_to_photo, 'rb') as photo:
         files = {'photo': photo}
         response = requests.post(url, files=files)
-        response.raise_for_status()
-        return response.json()
+    response.raise_for_status()
+    return response.json()
 
 
 def save_photo_to_vk(token, user_id, group_id, photo, server, photo_hash):

@@ -2,7 +2,7 @@
 
 ## About
 
-This application downloads  random comics from [xkcd.com](https://xkcd.com) and publishes it into VKontakte group. Script publishes comic to the first group of user's group list.
+This application downloads  random comics from [xkcd.com](https://xkcd.com) and publishes it into VKontakte group. Group is set by exporting it's ID as environment variable.
 
 This application created for educational purposes as part of an online course for web developers at [dvmn.org](https://dvmn.org/)
 
@@ -24,6 +24,7 @@ To make application, you have to set two environment variables:
 ```
 export CLIENT_ID="ID of your VK application"
 export ACCESS_TOKEN="your VK API authentication token"
+export VK_GROUP_ID="ID of the group you want to post to"
 ```
 If you don't have VKontakte application, you can create it [here](https://vk.com/editapp?act=create). To make application work properly, choose `Standalone` option when creating it.
 If you run this script without authentication, it will print the link to authentication page to console. Follow the link, make necessary permissions and copy token from page URL.

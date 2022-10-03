@@ -60,7 +60,7 @@ def upload_photo(url, path_to_photo):
 
 def save_photo_to_vk(token, user_id, group_id, photo, server, photo_hash):
     url = 'https://api.vk.com/method/photos.saveWallPhoto'
-    data = {
+    params = {
         'access_token': token,
         'v': '5.194',
         'user_id': user_id,
@@ -69,14 +69,14 @@ def save_photo_to_vk(token, user_id, group_id, photo, server, photo_hash):
         'server': server,
         'hash': photo_hash
     }
-    response = requests.post(url, data=data)
+    response = requests.post(url, data=params)
     response.raise_for_status()
     return response.json()['response']
 
 
 def post_on_wall(token, group_id, photo_owner_id, photo, message):
     url = 'https://api.vk.com/method/wall.post'
-    data = {
+    params = {
         'access_token': token,
         'v': '5.194',
         'owner_id': - group_id,
@@ -84,7 +84,7 @@ def post_on_wall(token, group_id, photo_owner_id, photo, message):
         'message': message,
         'attachments': f'photo{photo_owner_id}_{photo}',
     }
-    response = requests.post(url, data=data)
+    response = requests.post(url, data=params)
     response.raise_for_status()
     return response.json()['response']
 

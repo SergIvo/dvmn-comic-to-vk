@@ -105,20 +105,21 @@ def repost_random_comic(token, user_id):
     image_path = os.path.join(os.getcwd(), 'comic.png')
     download_image(image_url, image_path)
     comment = get_image_comment(comic_url)
+    try:
+        groups = get_user_groups(token)
+        group_id = groups['items'][0]
+        server = get_wall_upload_server(token, group_id)
+        upload_url = server['upload_url']
 
-    groups = get_user_groups(token)
-    group_id = groups['items'][0]
-    server = get_wall_upload_server(token, group_id)
-    upload_url = server['upload_url']
+        uploaded_photo = upload_photo(upload_url, image_path)
+        photo, server, photo_hash = uploaded_photo['photo'], uploaded_photo['server'], uploaded_photo['hash']
 
-    uploaded_photo = upload_photo(upload_url, image_path)
-    photo, server, photo_hash = uploaded_photo['photo'], uploaded_photo['server'], uploaded_photo['hash']
-
-    saved_photo = save_photo_to_vk(token, user_id, group_id, photo, server, photo_hash)
-    photo_id = saved_photo[0]['id']
-    photo_owner_id = saved_photo[0]['owner_id']
-    post_on_wall(token, group_id, photo_owner_id, photo_id, comment)
-    os.remove(image_path)
+        saved_photo = save_photo_to_vk(token, user_id, group_id, photo, server, photo_hash)
+        photo_id = saved_photo[0]['id']
+        photo_owner_id = saved_photo[0]['owner_id']
+        post_on_wall(token, group_id, photo_owner_id, photo_id, comment)
+    finally:
+        os.remove(image_path)
 
 
 if __name__ == '__main__':

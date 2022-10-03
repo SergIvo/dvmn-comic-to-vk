@@ -1,6 +1,7 @@
 import os
-from urllib.parse import urlparse, urlencode, urlunparse, urljoin
 from random import randint
+from urllib.parse import urlparse, urlencode, urlunparse, urljoin
+
 import requests
 from dotenv import load_dotenv
 

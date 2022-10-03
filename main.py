@@ -99,12 +99,11 @@ def get_random_comic_url():
     return urljoin(base_url, str(random_comic_number))
 
 
-def repost_random_comic(token, user_id):
+def repost_random_comic(token, group_id, user_id):
     comic_url = get_random_comic_url()
     image_url, comment, image_path = get_image_details(comic_url)
     download_image(image_url, image_path)
     try:
-        group_id = int(os.getenv('VK_GROUP_ID'))
         server = get_wall_upload_server(token, group_id)
         upload_url = server['upload_url']
 
@@ -121,10 +120,11 @@ def repost_random_comic(token, user_id):
 
 if __name__ == '__main__':
     load_dotenv()
-    client_id = os.getenv('CLIENT_ID')
-    token = os.getenv('ACCESS_TOKEN')
+    client_id = os.getenv('VK_APP_ID')
+    token = os.getenv('VK_IMPLICIT_FLOW_TOKEN')
+    group_id = int(os.getenv('VK_GROUP_ID'))
     if token:
-        repost_random_comic(token, client_id)
+        repost_random_comic(token, group_id, client_id)
         print('Комикс опубликован в группе.')
     else:
         print(f'Follow this link to get the authentication token \n{make_url_for_token(client_id)}')

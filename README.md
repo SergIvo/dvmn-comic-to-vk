@@ -22,8 +22,8 @@ pip install -r requirements.txt
 ```
 To make application, you have to set two environment variables:
 ```
-export CLIENT_ID="ID of your VK application"
-export ACCESS_TOKEN="your VK API authentication token"
+export VK_APP_ID="ID of your VK application"
+export VK_IMPLICIT_FLOW_TOKEN="your VK API authentication token"
 export VK_GROUP_ID="ID of the group you want to post to"
 ```
 If you don't have VKontakte application, you can create it [here](https://vk.com/editapp?act=create). To make application work properly, choose `Standalone` option when creating it.

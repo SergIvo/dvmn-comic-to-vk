@@ -12,18 +12,14 @@ def download_image(url, path):
         file.write(response.content)
 
 
-def get_image_url(base_url):
+def get_image_details(base_url):
     response = requests.get(f'{base_url}/info.0.json')
     response.raise_for_status()
     image_details = response.json()
-    return image_details['img']
-
-
-def get_image_comment(base_url):
-    response = requests.get(f'{base_url}/info.0.json')
-    response.raise_for_status()
-    image_details = response.json()
-    return image_details['alt']
+    url = image_details['img']
+    comment = image_details['alt']
+    path = os.path.join(os.getcwd(), 'comic.png')
+    return url, comment, path
 
 
 def make_url_for_token(client_id):
@@ -101,10 +97,8 @@ def get_random_comic_url(limit):
 
 def repost_random_comic(token, user_id):
     comic_url = get_random_comic_url(2679)
-    image_url = get_image_url(comic_url)
-    image_path = os.path.join(os.getcwd(), 'comic.png')
+    image_url, comment, image_path = get_image_details(comic_url)
     download_image(image_url, image_path)
-    comment = get_image_comment(comic_url)
     try:
         groups = get_user_groups(token)
         group_id = groups['items'][0]

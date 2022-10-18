@@ -20,7 +20,7 @@ Use `pip` package manager to install dependencies from "requirements.txt" in cre
 ```
 pip install -r requirements.txt
 ```
-To make application, you have to set two environment variables:
+Before running the application, you have to set two environment variables:
 ```
 export VK_APP_ID="ID of your VK application"
 export VK_IMPLICIT_FLOW_TOKEN="your VK API authentication token"
